@@ -59,16 +59,20 @@ def save():
 
 
 def search():
-    with open("my_passwords.json", "r") as my_passwords:
-        data = json.load(my_passwords)
-        website_value = website[1].get()  # get the entry value
-        if website_value in data:
-            messagebox.showinfo(title=website_value,
-                                message=f"user_name : {data[website_value]['user_name']}\npassword : {data[website_value]['password']}")
-        else :
-            messagebox.showerror(title="Not found",message="This website is not in your passwords")
-        # ---------------------------- UI SETUP ------------------------------- #
+    try:
+        with open("my_passwords.json", "r") as my_passwords:
+            data = json.load(my_passwords)
+            website_value = website[1].get()  # get the entry value
+            if website_value in data:
+                messagebox.showinfo(title=website_value,
+                                    message=f"user_name : {data[website_value]['user_name']}\npassword : {data[website_value]['password']}")
+            else:
+                messagebox.showerror(title="Not found", message="This website is not in your saved accounts")
+    except FileNotFoundError:
+        messagebox.showerror(title="Not found", message="Add accounts to the list first")
 
+
+# ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
 window.title("Password Manager")
@@ -80,11 +84,11 @@ canvas.create_image(100, 100, image=logo)
 canvas.grid(column=1, row=0)
 # inputs
 # return a list content the label and the input in case you need to use config
-website = input_template("Website :", 35, 0, 1, columnspan=2)
-user_name = input_template("Email/Username :", 35, 0, 2, columnspan=2)
+website = input_template("Website :", 21, 0, 1)
+user_name = input_template("Email/Username :", 21, 0, 2)
 password = input_template("Password :", 21, 0, 3)
 # buttons
-search = btn_template("Search", grid_column=3, grid_row=1, command=search)
-generate = btn_template("Generate Password", grid_column=2, grid_row=3, command=password_generator)
-Add = btn_template("Add", grid_column=1, grid_row=4, btn_width=36, command=save, columnspan=2)
+search = btn_template("Search", grid_column=2, grid_row=1, btn_width=15,command=search)
+generate = btn_template("Generate Password", grid_column=2, grid_row=3, btn_width=15,command=password_generator)
+Add = btn_template("Add", grid_column=1, grid_row=4, btn_width=18, command=save)
 window.mainloop()
